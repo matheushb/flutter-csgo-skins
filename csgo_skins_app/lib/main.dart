@@ -1,3 +1,6 @@
+import 'package:csgo_skins_app/components/skin_card.dart';
+import 'package:csgo_skins_app/domain/entities/skin.dart';
+import 'package:csgo_skins_app/services/skins_service.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -27,7 +30,6 @@ class HomePage extends StatelessWidget {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    // Ação do menu hamburguer
                     Scaffold.of(context).openDrawer();
                     print('Menu hambúrguer clicado');
                   },
@@ -40,7 +42,6 @@ class HomePage extends StatelessWidget {
                 color: Colors.white,
               ),
               onPressed: () {
-                // Ação do carrinho
                 Scaffold.of(context).openEndDrawer();
                 print('Carrinho clicado');
               },
@@ -53,44 +54,88 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.grey[200],
       body: Column(
         children: [
-          Container(
-              color: Colors.blueAccent[100],
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: const SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    CategoryOption(
-                      label: 'Todas',
-                    ),
-                    CategoryOption(
-                      label: 'Facas',
-                    ),
-                    CategoryOption(
-                      label: 'Luvas',
-                    ),
-                    CategoryOption(
-                      label: 'Rifles',
-                    ),
-                    CategoryOption(
-                      label: 'Pistolas',
-                    ),
-                    CategoryOption(
-                      label: 'Smg',
-                    ),
-                    CategoryOption(
-                      label: 'Pesadas',
-                    ),
-                    CategoryOption(
-                      label: 'Outras',
-                    ),
-                  ],
-                ),
-              )),
-          const Expanded(child: Center(child: Text('Produtos'))),
+          FilterOptions(),
+          SkinsList(),
         ],
       ),
     );
+  }
+}
+
+class SkinsList extends StatelessWidget {
+  final SkinsService skinsService = SkinsService();
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: FutureBuilder<List<Skin>>(
+        future: skinsService.find(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(
+                child: Text('Erro ao carregar skins: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Nenhuma skin disponível'));
+          }
+
+          final skins = snapshot.data!;
+          return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.75,
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+            ),
+            itemCount: skins.length,
+            itemBuilder: (context, index) {
+              return SkinCard(skin: skins[index]);
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class FilterOptions extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: const Color.fromARGB(255, 146, 98, 236),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: const SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              CategoryOption(
+                label: 'Todas',
+              ),
+              CategoryOption(
+                label: 'Facas',
+              ),
+              CategoryOption(
+                label: 'Luvas',
+              ),
+              CategoryOption(
+                label: 'Rifles',
+              ),
+              CategoryOption(
+                label: 'Pistolas',
+              ),
+              CategoryOption(
+                label: 'Smg',
+              ),
+              CategoryOption(
+                label: 'Pesadas',
+              ),
+              CategoryOption(
+                label: 'Outras',
+              ),
+            ],
+          ),
+        ));
   }
 }
 
@@ -102,7 +147,7 @@ class CategoryOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: TextButton(
         onPressed: () {
           print('$label selecionado');
@@ -110,7 +155,7 @@ class CategoryOption extends StatelessWidget {
         child: Text(
           label,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 20,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -129,14 +174,12 @@ class Cart extends StatelessWidget {
           ListTile(
             title: const Text('Item 1'),
             onTap: () {
-              // Ação do item 1
               print('Item 1 clicado');
             },
           ),
           ListTile(
             title: const Text('Item 2'),
             onTap: () {
-              // Ação do item 2
               print('Item 2 clicado');
             },
           ),
@@ -155,21 +198,18 @@ class Menu extends StatelessWidget {
           ListTile(
             title: const Text('Home'),
             onTap: () {
-              // Ação do item 2
               print('Item 2 clicado');
             },
           ),
           ListTile(
             title: const Text('Entrar'),
             onTap: () {
-              // Ação do item 1
               print('Item 1 clicado');
             },
           ),
           ListTile(
             title: const Text('Registrar-se'),
             onTap: () {
-              // Ação do item 2
               print('Item 2 clicado');
             },
           ),
