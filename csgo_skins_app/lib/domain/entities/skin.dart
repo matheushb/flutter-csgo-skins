@@ -30,7 +30,9 @@ class Skin {
       imageUrl: json['imageUrl'],
       userId: json['userId'],
       seed: json['seed'],
-      skinType: SkinType.values[json['skinType']],
+      skinType: SkinType.values.firstWhere(
+        (e) => e.toString().split('.').last == json['skinType'],
+      ),
     );
   }
 
