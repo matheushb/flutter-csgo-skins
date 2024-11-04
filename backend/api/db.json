@@ -1,0 +1,274 @@
+{
+  "skins": [
+    {
+      "id": "1",
+      "name": "AK-47 | Redline",
+      "price": 10.0,
+      "float": 0.5,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 1,
+      "userId": "1",
+      "skinType": "rifle"
+    },
+    {
+      "id": "2",
+      "name": "AWP | Dragon Lore",
+      "price": 100.0,
+      "float": 0.1,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 2,
+      "userId": "1",
+      "skinType": "rifle"
+    },
+    {
+      "id": "3",
+      "name": "M4A4 | Howl",
+      "price": 50.0,
+      "float": 0.3,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 3,
+      "userId": "1",
+      "skinType": "rifle"
+    },
+    {
+      "id": "4",
+      "name": "Desert Eagle | Blaze",
+      "price": 20.0,
+      "float": 0.7,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 4,
+      "userId": "1",
+      "skinType": "pistol"
+    },
+    {
+      "id": "5",
+      "name": "USP-S | Neo-Noir",
+      "price": 5.0,
+      "float": 0.9,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 5,
+      "userId": "1",
+      "skinType": "pistol"
+    },
+    {
+      "id": "6",
+      "name": "Glock-18 | Fade",
+      "price": 3.0,
+      "float": 0.8,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 6,
+      "userId": "1",
+      "skinType": "pistol"
+    },
+    {
+      "id": "7",
+      "name": "P90 | Death by Kitty",
+      "price": 15.0,
+      "float": 0.6,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 7,
+      "userId": "1",
+      "skinType": "smg"
+    },
+    {
+      "id": "8",
+      "name": "MP9 | Bulldozer",
+      "price": 7.0,
+      "float": 0.4,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 8,
+      "userId": "1",
+      "skinType": "smg"
+    },
+    {
+      "id": "9",
+      "name": "PP-Bizon | Judgement of Anubis",
+      "price": 2.0,
+      "float": 0.2,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 9,
+      "userId": "1",
+      "skinType": "smg"
+    },
+    {
+      "id": "10",
+      "name": "Negev | Loudmouth",
+      "price": 1.0,
+      "float": 0.1,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 10,
+      "userId": "1",
+      "skinType": "heavy"
+    },
+    {
+      "id": "11",
+      "name": "MAG-7 | Bulldozer",
+      "price": 3.0,
+      "float": 0.3,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 11,
+      "userId": "1",
+      "skinType": "heavy"
+    },
+    {
+      "id": "12",
+      "name": "XM1014 | Black Tie",
+      "price": 4.0,
+      "float": 0.4,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 12,
+      "userId": "1",
+      "skinType": "heavy"
+    },
+    {
+      "id": "13",
+      "name": "Gut Knife | Doppler",
+      "price": 30.0,
+      "float": 0.5,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 13,
+      "userId": "1",
+      "skinType": "knife"
+    },
+    {
+      "id": "14",
+      "name": "Karambit | Tiger Tooth",
+      "price": 100.0,
+      "float": 0.6,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 14,
+      "userId": "1",
+      "skinType": "knife"
+    },
+    {
+      "id": "15",
+      "name": "Bayonet | Doppler",
+      "price": 50.0,
+      "float": 0.7,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 15,
+      "userId": "1",
+      "skinType": "knife"
+    },
+    {
+      "id": "16",
+      "name": "Driver Gloves | Crimson Weave",
+      "price": 70.0,
+      "float": 0.8,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 16,
+      "userId": "1",
+      "skinType": "gloves"
+    },
+    {
+      "id": "17",
+      "name": "Hand Wraps | Slaughter",
+      "price": 80.0,
+      "float": 0.9,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 17,
+      "userId": "1",
+      "skinType": "gloves"
+    },
+    {
+      "id": "18",
+      "name": "Moto Gloves | Spearmint",
+      "price": 90.0,
+      "float": 0.1,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 18,
+      "userId": "1",
+      "skinType": "gloves"
+    },
+    {
+      "id": "19",
+      "name": "Stiletto Knife | Fade",
+      "price": 40.0,
+      "float": 0.2,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 19,
+      "userId": "1",
+      "skinType": "knife"
+    },
+    {
+      "id": "20",
+      "name": "Navaja Knife | Doppler",
+      "price": 60.0,
+      "float": 0.3,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 20,
+      "userId": "1",
+      "skinType": "knife"
+    },
+    {
+      "id": "21",
+      "name": "Skeleton Knife | Fade",
+      "price": 70.0,
+      "float": 0.4,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 21,
+      "userId": "1",
+      "skinType": "knife"
+    },
+    {
+      "id": "22",
+      "name": "Sport Gloves | Pandora's Box",
+      "price": 100.0,
+      "float": 0.5,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 22,
+      "userId": "1",
+      "skinType": "gloves"
+    },
+    {
+      "id": "23",
+      "name": "Driver Gloves | Convoy",
+      "price": 80.0,
+      "float": 0.6,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 23,
+      "userId": "1",
+      "skinType": "gloves"
+    },
+    {
+      "id": "24",
+      "name": "Hand Wraps | Badlands",
+      "price": 90.0,
+      "float": 0.7,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 24,
+      "userId": "1",
+      "skinType": "gloves"
+    },
+    {
+      "id": "25",
+      "name": "Moto Gloves | Boom!",
+      "price": 70.0,
+      "float": 0.8,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 25,
+      "userId": "1",
+      "skinType": "gloves"
+    },
+    {
+      "id": "26",
+      "name": "Specialist Gloves | Crimson Kimono",
+      "price": 80.0,
+      "float": 0.9,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 26,
+      "userId": "1",
+      "skinType": "gloves"
+    },
+    {
+      "id": "27",
+      "name": "Sport Gloves | Hedge Maze",
+      "price": 90.0,
+      "float": 0.1,
+      "imageUrl": "https://via.placeholder.com/150",
+      "seed": 27,
+      "userId": "1",
+      "skinType": "gloves"
+    }
+  ]
+}
