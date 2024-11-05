@@ -21,6 +21,20 @@ class Skin {
     required this.skinType,
   });
 
+  String getWear() {
+    if (float < 0.07) {
+      return 'Factory New';
+    } else if (float < 0.15) {
+      return 'Minimal Wear';
+    } else if (float < 0.38) {
+      return 'Field-Tested';
+    } else if (float < 0.45) {
+      return 'Well-Worn';
+    } else {
+      return 'Battle-Scarred';
+    }
+  }
+
   factory Skin.fromJson(Map<String, dynamic> json) {
     return Skin(
       id: json['id'],
@@ -45,7 +59,7 @@ class Skin {
       'imageUrl': imageUrl,
       'seed': seed,
       'userId': userId,
-      'skinType': skinType.toString(),
+      'skinType': skinType.toString().split('.').last,
     };
   }
 }
