@@ -9,8 +9,8 @@ class SkinCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.grey[600],
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      color: const Color.fromARGB(255, 255, 255, 255),
+      margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
