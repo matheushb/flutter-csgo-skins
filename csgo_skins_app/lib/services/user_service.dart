@@ -25,8 +25,14 @@ class UserService extends Service<User> {
 
   @override
   Future<User> create(Object body) async {
-    final response =
-        await client.post(Uri.parse(baseUrl), body: jsonEncode(body));
+    final response = await client.post(
+      Uri.parse(baseUrl),
+      body: jsonEncode(body),
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode != 201) {
+      throw Exception('Falha ao criar usuário');
+    }
     return User.fromJson(json.decode(response.body));
   }
 
