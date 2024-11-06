@@ -44,8 +44,8 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              '../web/icons/logo.png', // Certifique-se de que o caminho está correto
-              height: 100, // Ajuste a altura conforme necessário
+              '../web/icons/logo.png',
+              height: 100,
             ),
           ],
         ),
