@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 
 class SkinCard extends StatelessWidget {
   final Skin skin;
+  final VoidCallback onAddToCart;
 
-  const SkinCard({super.key, required this.skin});
+  const SkinCard({super.key, required this.skin, required this.onAddToCart});
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +128,7 @@ class SkinCard extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        // Lógica para adicionar ao carrinho
+                        onAddToCart();
                         Navigator.of(context).pop();
                       },
                       child: const Text("Adicionar ao Carrinho"),
