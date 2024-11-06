@@ -11,7 +11,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: CategoryOption(label: testLabel),
+            body: CategoryOption(label: testLabel),),
           ),
         ),
       );

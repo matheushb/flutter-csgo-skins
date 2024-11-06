@@ -11,8 +11,9 @@ class SkinService extends Service<Skin> {
   SkinService(this.client);
 
   @override
-  Future<List<Skin>> find() async {
-    final response = await client.get(Uri.parse(baseUrl));
+  Future<List<Skin>> find({String category = ''}) async {
+    final response = await client.get(
+        Uri.parse(baseUrl + (category != '' ? '?skinType=$category' : '')));
     final List<dynamic> jsonResponse = json.decode(response.body);
     return jsonResponse.map((data) => Skin.fromJson(data)).toList();
   }

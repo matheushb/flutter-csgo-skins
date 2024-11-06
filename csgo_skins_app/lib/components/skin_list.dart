@@ -5,15 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class SkinsList extends StatelessWidget {
+  final String selectedCategory;
+
+  SkinsList({super.key, required this.selectedCategory});
+
   final SkinService skinsService = SkinService(http.Client());
 
-  SkinsList({super.key});
+  Future<List<Skin>> _fetchSkins() {
+    return skinsService.find(category: selectedCategory);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: FutureBuilder<List<Skin>>(
-        future: skinsService.find(),
+        future: _fetchSkins(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
