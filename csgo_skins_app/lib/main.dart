@@ -2,8 +2,9 @@ import 'package:csgo_skins_app/components/cart.dart';
 import 'package:csgo_skins_app/components/filter_options.dart';
 import 'package:csgo_skins_app/components/menu.dart';
 import 'package:csgo_skins_app/components/skin_list.dart';
-import 'package:csgo_skins_app/domain/entities/enums/map_label_to_enum.dart';
+import 'package:csgo_skins_app/domain/entities/user.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +23,9 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final User? user;
+
+  const HomePage({super.key, this.user});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -33,8 +36,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onCategorySelected(String category) {
     setState(() {
-      selectedCategory = mapCategoryToQuery(category);
-      ;
+      selectedCategory = category;
     });
   }
 
@@ -59,6 +61,17 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         actions: [
+          if (widget.user != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Text(
+                'Saldo: ${NumberFormat.simpleCurrency(locale: 'pt_BR').format(widget.user?.balance ?? 0.0)}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
+              ),
+            ),
           Builder(
             builder: (BuildContext context) => IconButton(
               icon: const Icon(Icons.shopping_cart, color: Colors.white),
@@ -70,7 +83,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: Menu(),
-      endDrawer: Cart(),
+      endDrawer: CartDrawer(),
       backgroundColor: const Color.fromARGB(255, 20, 20, 20),
       body: Column(
         children: [
