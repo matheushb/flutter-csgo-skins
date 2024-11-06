@@ -1,18 +1,26 @@
 import 'package:csgo_skins_app/components/skin_card.dart';
+import 'package:csgo_skins_app/domain/entities/cart.dart';
+import 'package:csgo_skins_app/domain/entities/enums/map_label_to_enum.dart';
 import 'package:csgo_skins_app/domain/entities/skin.dart';
 import 'package:csgo_skins_app/services/skins_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class SkinsList extends StatelessWidget {
+class SkinsList extends StatefulWidget {
   final String selectedCategory;
 
   SkinsList({super.key, required this.selectedCategory});
 
+  @override
+  _SkinsListState createState() => _SkinsListState();
+}
+
+class _SkinsListState extends State<SkinsList> {
   final SkinService skinsService = SkinService(http.Client());
 
   Future<List<Skin>> _fetchSkins() {
-    return skinsService.find(category: selectedCategory);
+    return skinsService.find(
+        category: mapCategoryToQuery(widget.selectedCategory));
   }
 
   @override
@@ -40,7 +48,17 @@ class SkinsList extends StatelessWidget {
             ),
             itemCount: skins.length,
             itemBuilder: (context, index) {
-              return SkinCard(skin: skins[index]);
+              return SkinCard(
+                skin: skins[index],
+                onAddToCart: () {
+                  Cart().add(skins[index]);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(
+                            '${skins[index].name} adicionada ao carrinho')),
+                  );
+                },
+              );
             },
           );
         },
