@@ -13,7 +13,7 @@ class SkinCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => _showSkinDialog(context),
       child: Card(
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color: const Color.fromARGB(255, 40, 40, 40),
         margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         elevation: 4,
         shape: RoundedRectangleBorder(
@@ -44,7 +44,7 @@ class SkinCard extends StatelessWidget {
                     const BorderRadius.vertical(bottom: Radius.circular(24)),
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
-                  color: const Color.fromARGB(255, 167, 130, 236),
+                  color: const Color.fromARGB(255, 105, 77, 161),
                   width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,6 +54,7 @@ class SkinCard extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -62,6 +63,7 @@ class SkinCard extends StatelessWidget {
                       Text(
                         skin.getWear(),
                         overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.grey.shade300),
                       ),
                       Text(
                         NumberFormat.simpleCurrency(locale: 'pt_BR')
@@ -101,6 +103,7 @@ class SkinCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: Colors.black87,
                   ),
                 ),
                 const SizedBox(height: 8),
