@@ -1,7 +1,6 @@
-import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:csgo_skins_app/domain/entities/skin.dart';
 import 'package:csgo_skins_app/services/skins_service.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -29,6 +28,49 @@ class _UserSkinsScreenState extends State<UserSkinsScreen> {
     final skins = await skinService.find(userId: widget.userId);
     _totalValue = skins.fold(0, (sum, skin) => sum + skin.price);
     return skins;
+  }
+
+  Future<void> _showPriceEditDialog(Skin skin) async {
+    double? newPrice;
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Alterar Preço'),
+          content: TextField(
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(labelText: 'Novo preço'),
+            onChanged: (value) {
+              newPrice = double.tryParse(value);
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (newPrice != null && newPrice! > 0) {
+                  skin.price = newPrice!;
+                  final skinService = SkinService(http.Client());
+                  await skinService.update(skin.id, skin.toJson());
+                  setState(() {
+                    _userSkinsFuture = _fetchUserSkins();
+                  });
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Preço atualizado com sucesso!')),
+                  );
+                }
+              },
+              child: const Text('Salvar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -109,6 +151,11 @@ class _UserSkinsScreenState extends State<UserSkinsScreen> {
                                 Text(
                                   'Preço: ${NumberFormat.simpleCurrency(locale: 'pt_BR').format(skin.price)}',
                                   style: const TextStyle(color: Colors.grey),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.edit,
+                                      color: Colors.white),
+                                  onPressed: () => _showPriceEditDialog(skin),
                                 ),
                               ],
                             ),
