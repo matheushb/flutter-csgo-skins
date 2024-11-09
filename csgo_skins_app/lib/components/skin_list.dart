@@ -8,8 +8,9 @@ import 'package:http/http.dart' as http;
 
 class SkinsList extends StatefulWidget {
   final String selectedCategory;
+  final String? userId;
 
-  SkinsList({super.key, required this.selectedCategory});
+  SkinsList({super.key, required this.selectedCategory, this.userId});
 
   @override
   _SkinsListState createState() => _SkinsListState();
@@ -18,9 +19,15 @@ class SkinsList extends StatefulWidget {
 class _SkinsListState extends State<SkinsList> {
   final SkinService skinsService = SkinService(http.Client());
 
-  Future<List<Skin>> _fetchSkins() {
-    return skinsService.find(
-        category: mapCategoryToQuery(widget.selectedCategory));
+  Future<List<Skin>> _fetchSkins() async {
+    final allSkins = await skinsService.find(
+      category: mapCategoryToQuery(widget.selectedCategory),
+    );
+
+    if (widget.userId == null) {
+      return allSkins;
+    }
+    return allSkins.where((skin) => skin.userId != widget.userId).toList();
   }
 
   @override
@@ -33,18 +40,24 @@ class _SkinsListState extends State<SkinsList> {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(
-                child: Text('Erro ao carregar skins: ${snapshot.error}'));
+                child: Text('Erro ao carregar skins: ${snapshot.error}',
+                    style: TextStyle(color: Colors.redAccent)));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Nenhuma skin disponível'));
+            return const Center(
+                child: Text(
+              'Nenhuma skin disponível',
+              style: TextStyle(color: Colors.grey),
+            ));
           }
 
           final skins = snapshot.data!;
           return GridView.builder(
+            padding: const EdgeInsets.all(12.0),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
+              crossAxisSpacing: 10.0,
+              mainAxisSpacing: 10.0,
               childAspectRatio: 0.75,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
             ),
             itemCount: skins.length,
             itemBuilder: (context, index) {
@@ -54,8 +67,12 @@ class _SkinsListState extends State<SkinsList> {
                   Cart().add(skins[index]);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(
-                            '${skins[index].name} adicionada ao carrinho')),
+                      backgroundColor: Colors.blueGrey,
+                      content: Text(
+                        '${skins[index].name} adicionada ao carrinho',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
                   );
                 },
               );
