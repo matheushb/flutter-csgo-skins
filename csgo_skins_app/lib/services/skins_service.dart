@@ -11,16 +11,24 @@ class SkinService extends Service<Skin> {
   SkinService(this.client);
 
   @override
-  Future<List<Skin>> find() async {
-    final response = await client.get(Uri.parse(baseUrl));
+  Future<List<Skin>> find({String category = '', String? userId}) async {
+    final response = await client.get(Uri.parse(baseUrl +
+        (category != '' ? '?skinType=$category' : '?skinType=') +
+        (userId != null ? '&userId=$userId' : '')));
     final List<dynamic> jsonResponse = json.decode(response.body);
     return jsonResponse.map((data) => Skin.fromJson(data)).toList();
   }
 
   @override
   Future<Skin> findOne(String id) async {
-    final response = await client.get(Uri.parse(baseUrl));
-    return Skin.fromJson(json.decode(response.body));
+    print("$baseUrl/$id");
+    final response = await client.get(Uri.parse("$baseUrl/$id"));
+
+    if (response.statusCode == 200 && response.body.isNotEmpty) {
+      return Skin.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Erro ao buscar a Skin: ${response.statusCode}');
+    }
   }
 
   @override
@@ -32,14 +40,22 @@ class SkinService extends Service<Skin> {
 
   @override
   Future<Skin> update(String id, Object body) async {
-    final response =
-        await client.patch(Uri.parse(baseUrl), body: jsonEncode(body));
-    return Skin.fromJson(json.decode(response.body));
+    final response = await client.patch(
+      Uri.parse("$baseUrl/$id"),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      return Skin.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Erro ao atualizar a Skin: ${response.statusCode}');
+    }
   }
 
   @override
   Future<void> delete(String id) async {
-    final response = await client.delete(Uri.parse(baseUrl));
+    final response = await client.delete(Uri.parse("baseUrl/$id"));
     if (response.statusCode != 200) {
       throw Exception('Failed to delete Skin');
     }

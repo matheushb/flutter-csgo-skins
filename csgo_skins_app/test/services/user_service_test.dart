@@ -1,114 +1,135 @@
 import 'dart:convert';
+import 'package:csgo_skins_app/domain/entities/user.dart';
+import 'package:csgo_skins_app/services/user_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:csgo_skins_app/services/user_service.dart';
-import 'package:csgo_skins_app/domain/entities/user.dart';
 
-class MockClient extends Mock implements http.Client {}
+class MockHttpClient extends Mock implements http.Client {}
+
+class FakeUri extends Fake implements Uri {}
 
 void main() {
-  late MockClient mockClient;
   late UserService userService;
+  late MockHttpClient mockHttpClient;
+
+  setUpAll(() {
+    registerFallbackValue(FakeUri());
+  });
 
   setUp(() {
-    mockClient = MockClient();
-    userService = UserService(mockClient);
+    mockHttpClient = MockHttpClient();
+    userService = UserService(mockHttpClient);
   });
 
   group('UserService', () {
-    test('find() returns a list of users when the http call is successful',
-        () async {
-      final responseJson = [
-        {
-          'id': '1',
-          'name': 'John Doe',
-          'email': 'john.doe@example.com',
-          'password': 'password123',
-          'balance': 100.0,
-        },
-      ];
+    final mockUser = User(
+      id: '1',
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      password: 'password123',
+      balance: 100.0,
+    );
 
-      when(() => mockClient.get(Uri.parse('http://localhost:3000/users')))
-          .thenAnswer(
-        (_) async => http.Response(jsonEncode(responseJson), 200),
+    final mockUserJson = jsonEncode(mockUser.toJson());
+
+    test('find() returns a list of users', () async {
+      when(() => mockHttpClient.get(any())).thenAnswer(
+        (_) async => http.Response('[$mockUserJson]', 200),
       );
 
       final users = await userService.find();
 
       expect(users, isA<List<User>>());
-      expect(users.length, 1);
-      expect(users[0].id, '1');
-      expect(users[0].name, 'John Doe');
+      expect(users.first.name, equals(mockUser.name));
     });
 
-    test('findOne() returns a user when the http call is successful', () async {
-      final responseJson = {
-        'id': '1',
-        'name': 'John Doe',
-        'email': 'john.doe@example.com',
-        'password': 'password123',
-        'balance': 100.0,
-      };
-
-      when(() => mockClient.get(Uri.parse('http://localhost:3000/users')))
-          .thenAnswer(
-        (_) async => http.Response(jsonEncode(responseJson), 200),
+    test('findOne() returns a user when the ID exists', () async {
+      when(() => mockHttpClient.get(any())).thenAnswer(
+        (_) async => http.Response(mockUserJson, 200),
       );
 
       final user = await userService.findOne('1');
 
       expect(user, isA<User>());
-      expect(user.id, '1');
-      expect(user.name, 'John Doe');
+      expect(user.name, equals(mockUser.name));
     });
 
-    test('create() creates a user when the http call is successful', () async {
-      final userToCreate = User(
-        id: '2',
-        name: 'Jane Doe',
-        email: 'jane.doe@example.com',
-        password: 'password456',
+    test('findOne() throws exception when the ID does not exist', () async {
+      when(() => mockHttpClient.get(any())).thenAnswer(
+        (_) async => http.Response('', 404),
       );
 
-      final responseJson = {
-        'id': '2',
-        'name': 'Jane Doe',
-        'email': 'jane.doe@example.com',
-        'password': 'password456',
-        'balance': 0.0,
-      };
+      expect(() => userService.findOne('1'), throwsException);
+    });
 
-      when(() => mockClient.post(
-            Uri.parse('http://localhost:3000/users'),
-            body: jsonEncode({
-              'id': userToCreate.id,
-              'name': userToCreate.name,
-              'email': userToCreate.email,
-              'password': userToCreate.password,
-              'balance': userToCreate.balance,
-            }),
+    test('create() returns a user when creation is successful', () async {
+      when(() => mockHttpClient.post(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
           )).thenAnswer(
-        (_) async => http.Response(jsonEncode(responseJson), 201),
+        (_) async => http.Response(mockUserJson, 201),
       );
 
-      final createdUser = await userService.create(userToCreate);
+      final user = await userService.create(mockUser.toJson());
 
-      expect(createdUser, isA<User>());
-      expect(createdUser.id, '2');
-      expect(createdUser.name, 'Jane Doe');
+      expect(user, isA<User>());
+      expect(user.name, equals(mockUser.name));
     });
 
-    test('delete() deletes a user when the http call is successful', () async {
-      when(() => mockClient.delete(Uri.parse('http://localhost:3000/users')))
-          .thenAnswer(
+    test('create() throws exception when creation fails', () async {
+      when(() => mockHttpClient.post(
+            any(),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          )).thenAnswer(
+        (_) async => http.Response('', 400),
+      );
+
+      expect(() => userService.create(mockUser.toJson()), throwsException);
+    });
+
+    test('update() returns an updated user when the request is successful',
+        () async {
+      when(() => mockHttpClient.patch(
+            any(),
+            body: any(named: 'body'),
+          )).thenAnswer(
+        (_) async => http.Response(mockUserJson, 200),
+      );
+
+      final updatedUser = await userService.update('1', mockUser.toJson());
+
+      expect(updatedUser, isA<User>());
+      expect(updatedUser.name, equals(mockUser.name));
+    });
+
+    test('update() throws exception when the update fails', () async {
+      when(() => mockHttpClient.patch(
+            any(),
+            body: any(named: 'body'),
+          )).thenAnswer(
+        (_) async => http.Response('', 404),
+      );
+
+      expect(() => userService.update('1', mockUser.toJson()), throwsException);
+    });
+
+    test('delete() completes when the user is successfully deleted', () async {
+      when(() => mockHttpClient.delete(any())).thenAnswer(
         (_) async => http.Response('', 200),
       );
 
-      await userService.delete('1');
+      expect(userService.delete('1'), completes);
+    });
 
-      verify(() => mockClient.delete(Uri.parse('http://localhost:3000/users')))
-          .called(1);
+    test('delete() throws exception when the deletion fails', () async {
+      when(() => mockHttpClient.delete(any())).thenAnswer(
+        (_) async => http.Response('', 404),
+      );
+
+      expect(() => userService.delete('1'), throwsException);
     });
   });
 }

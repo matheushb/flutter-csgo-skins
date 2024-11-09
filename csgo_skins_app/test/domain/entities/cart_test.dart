@@ -1,97 +1,67 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:csgo_skins_app/domain/entities/skin.dart';
 import 'package:csgo_skins_app/domain/entities/cart.dart';
 import 'package:csgo_skins_app/domain/entities/enums/skin_type.dart';
+import 'package:csgo_skins_app/domain/entities/skin.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Cart', () {
-    test('should add a skin to the cart', () {
-      final cart = Cart();
-      final skin = Skin(
-        id: '1',
-        name: 'AWP | Dragon Lore',
-        price: 5000.0,
-        float: 0.05,
-        imageUrl: 'http://example.com/image.png',
-        seed: 123456,
-        userId: 'user123',
-        skinType: SkinType.rifle,
-      );
+  late Cart cart;
+  late Skin skin1;
+  late Skin skin2;
 
-      cart.add(skin);
+  setUp(() {
+    cart = Cart();
+    skin1 = Skin(
+      id: '1',
+      name: 'AK-47 | Redline',
+      price: 15.0,
+      float: 0.05,
+      imageUrl: 'url',
+      seed: 1,
+      userId: 'user1',
+      skinType: SkinType.rifle,
+    );
+    skin2 = Skin(
+      id: '2',
+      name: 'M4A4 | Asiimov',
+      price: 20.0,
+      float: 0.1,
+      imageUrl: 'url',
+      seed: 2,
+      userId: 'user2',
+      skinType: SkinType.rifle,
+    );
+  });
 
-      expect(cart.getTotalItems(), 1);
-      expect(cart.skins[0], skin);
-    });
+  test('Cart should add skin correctly', () {
+    cart.add(skin1);
+    expect(cart.getTotalItems(), 1);
+    expect(cart.skins.contains(skin1), true);
+  });
 
-    test('should remove a skin from the cart', () {
-      final cart = Cart();
-      final skin = Skin(
-        id: '1',
-        name: 'AWP | Dragon Lore',
-        price: 5000.0,
-        float: 0.05,
-        imageUrl: 'http://example.com/image.png',
-        seed: 123456,
-        userId: 'user123',
-        skinType: SkinType.rifle,
-      );
+  test('Cart should remove skin correctly', () {
+    cart.clear();
+    cart.add(skin1);
+    cart.add(skin2);
 
-      cart.add(skin);
+    cart.remove(skin1);
 
-      expect(cart.getTotalItems(), 1);
+    expect(cart.getTotalItems(), 1);
+    expect(cart.skins.contains(skin1), false);
+    expect(cart.skins.contains(skin2), true);
+  });
 
-      cart.remove(skin);
+  test('Cart should calculate total price correctly', () {
+    cart.clear();
+    cart.add(skin1);
+    cart.add(skin2);
 
-      expect(cart.getTotalItems(), 0);
-    });
+    expect(cart.getTotalPrice(), 35.0);
+  });
 
-    test('should calculate total price of skins in the cart', () {
-      final cart = Cart();
-      final skin1 = Skin(
-        id: '1',
-        name: 'AWP | Dragon Lore',
-        price: 5000.0,
-        float: 0.05,
-        imageUrl: 'http://example.com/image.png',
-        seed: 123456,
-        userId: 'user123',
-        skinType: SkinType.rifle,
-      );
-      final skin2 = Skin(
-        id: '2',
-        name: 'AK-47 | Redline',
-        price: 3000.0,
-        float: 0.1,
-        imageUrl: 'http://example.com/image2.png',
-        seed: 654321,
-        userId: 'user456',
-        skinType: SkinType.rifle,
-      );
-
-      cart.add(skin1);
-      cart.add(skin2);
-
-      expect(cart.getTotalPrice(), 8000.0);
-    });
-
-    test('should clear the cart', () {
-      final cart = Cart();
-      final skin = Skin(
-        id: '1',
-        name: 'AWP | Dragon Lore',
-        price: 5000.0,
-        float: 0.05,
-        imageUrl: 'http://example.com/image.png',
-        seed: 123456,
-        userId: 'user123',
-        skinType: SkinType.rifle,
-      );
-
-      cart.add(skin);
-      cart.clear();
-
-      expect(cart.getTotalItems(), 0);
-    });
+  test('Cart should clear skins correctly', () {
+    cart.add(skin1);
+    cart.add(skin2);
+    cart.clear();
+    expect(cart.getTotalItems(), 0);
   });
 }
