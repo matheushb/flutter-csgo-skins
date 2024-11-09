@@ -1,4 +1,6 @@
 import 'package:csgo_skins_app/main.dart';
+import 'package:csgo_skins_app/screens/home_page_screen.dart';
+import 'package:csgo_skins_app/screens/user_skins_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:csgo_skins_app/services/auth_service.dart';
 import 'package:csgo_skins_app/services/user_service.dart';
@@ -6,7 +8,10 @@ import 'package:csgo_skins_app/domain/entities/user.dart';
 import 'package:http/http.dart' as http;
 
 class Menu extends StatelessWidget {
-  const Menu({super.key});
+  final User? user;
+  final VoidCallback onLogout;
+
+  const Menu({super.key, required this.user, required this.onLogout});
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +25,40 @@ class Menu extends StatelessWidget {
               Navigator.pushReplacementNamed(context, '/home');
             },
           ),
-          ListTile(
-            title: const Text('Entrar', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              _showLoginModal(context);
-            },
-          ),
-          ListTile(
-            title: const Text('Registrar-se',
-                style: TextStyle(color: Colors.white)),
-            onTap: () {
-              _showRegisterModal(context);
-            },
-          ),
+          if (user != null)
+            ListTile(
+              title: const Text('Minhas Skins',
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserSkinsScreen(userId: user!.id),
+                  ),
+                );
+              },
+            ),
+          if (user == null) ...[
+            ListTile(
+              title:
+                  const Text('Entrar', style: TextStyle(color: Colors.white)),
+              onTap: () {
+                _showLoginModal(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Registrar-se',
+                  style: TextStyle(color: Colors.white)),
+              onTap: () {
+                _showRegisterModal(context);
+              },
+            ),
+          ] else
+            ListTile(
+              title:
+                  const Text('Deslogar', style: TextStyle(color: Colors.white)),
+              onTap: onLogout,
+            ),
         ],
       ),
     );
@@ -104,7 +130,6 @@ class Menu extends StatelessWidget {
     );
   }
 
-  // Função para mostrar o modal de registro
   void _showRegisterModal(BuildContext context) {
     final userService = UserService(http.Client());
 
