@@ -7,7 +7,7 @@ class Skin {
   final double float;
   final String imageUrl;
   final int seed;
-  final String userId;
+  String userId;
   final SkinType skinType;
 
   Skin({

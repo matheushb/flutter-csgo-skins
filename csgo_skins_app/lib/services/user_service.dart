@@ -19,7 +19,7 @@ class UserService extends Service<User> {
 
   @override
   Future<User> findOne(String id) async {
-    final response = await client.get(Uri.parse(baseUrl));
+    final response = await client.get(Uri.parse("$baseUrl/$id"));
     return User.fromJson(json.decode(response.body));
   }
 
@@ -38,14 +38,19 @@ class UserService extends Service<User> {
 
   @override
   Future<User> update(String id, Object body) async {
+    print(body);
+    print(id);
+
     final response =
-        await client.patch(Uri.parse(baseUrl), body: jsonEncode(body));
+        await client.patch(Uri.parse("$baseUrl/$id"), body: jsonEncode(body));
+
+    print(response.body);
     return User.fromJson(json.decode(response.body));
   }
 
   @override
   Future<void> delete(String id) async {
-    final response = await client.delete(Uri.parse(baseUrl));
+    final response = await client.delete(Uri.parse("$baseUrl/$id"));
     if (response.statusCode != 200) {
       throw Exception('Failed to delete user');
     }

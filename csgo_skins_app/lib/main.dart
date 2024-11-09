@@ -40,6 +40,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _updateBalance() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +87,10 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: Menu(),
-      endDrawer: CartDrawer(),
+      endDrawer: CartDrawer(
+        user: widget.user,
+        onBalanceUpdated: _updateBalance,
+      ),
       backgroundColor: const Color.fromARGB(255, 20, 20, 20),
       body: Column(
         children: [

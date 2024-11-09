@@ -1,9 +1,16 @@
 import 'package:csgo_skins_app/domain/entities/cart.dart';
+import 'package:csgo_skins_app/domain/entities/user.dart';
+import 'package:csgo_skins_app/services/skins_service.dart';
+import 'package:csgo_skins_app/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class CartDrawer extends StatefulWidget {
-  const CartDrawer({super.key});
+  final User? user;
+  final VoidCallback? onBalanceUpdated;
+
+  const CartDrawer({super.key, this.user, this.onBalanceUpdated});
 
   @override
   _CartDrawerState createState() => _CartDrawerState();
@@ -64,12 +71,64 @@ class _CartDrawerState extends State<CartDrawer> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
-                // Adicione a lógica de compra aqui, como checkout, etc.
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('Compra realizada com sucesso!')),
-                );
+              onPressed: () async {
+                final user = widget.user;
+                if (user == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Usuário não está logado!')),
+                  );
+                  return;
+                }
+
+                final totalPrice = cart.getTotalPrice();
+
+                if (user.balance < totalPrice) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Saldo insuficiente!')),
+                  );
+                  return;
+                }
+
+                final skinService = SkinService(http.Client());
+
+                for (var skin in cart.skins) {
+                  final updatedSkin = skin.toJson();
+                  updatedSkin['userId'] = user.id;
+
+                  try {
+                    await skinService.update(skin.id, updatedSkin);
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                          content:
+                              Text('Erro ao atualizar skin ${skin.name}: $e')),
+                    );
+                    return;
+                  }
+                }
+
+                user.balance -= totalPrice;
+
+                try {
+                  await UserService(http.Client())
+                      .update(user.id, user.toJson());
+                  setState(() {
+                    cart.clear();
+                  });
+
+                  widget.onBalanceUpdated?.call();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Compra realizada com sucesso!')),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content:
+                            Text('Erro ao atualizar saldo do usuário: $e')),
+                  );
+                }
               },
               child: const Text(
                 'Comprar',
