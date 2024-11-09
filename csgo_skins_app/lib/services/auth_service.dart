@@ -19,8 +19,6 @@ class AuthService {
 
     final user = User.fromJson(json.decode(response.body)[0]);
 
-    print(user);
-
     return user;
   }
 }
