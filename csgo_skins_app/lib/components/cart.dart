@@ -133,8 +133,8 @@ class _CartDrawerState extends State<CartDrawer> {
               child: const Text(
                 'Comprar',
                 style: TextStyle(
-                  color: Colors.white, // Cor do texto
-                  fontSize: 18, // Tamanho do texto
+                  color: Colors.white,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
