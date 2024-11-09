@@ -3,7 +3,7 @@ import 'package:csgo_skins_app/domain/entities/enums/skin_type.dart';
 class Skin {
   final String id;
   final String name;
-  final double price;
+  double price;
   final double float;
   final String imageUrl;
   final int seed;
